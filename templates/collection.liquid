@@ -1,0 +1,72 @@
+{% comment %}
+#################################################################################
+### This is the main collections page, the PLP.
+### required includes are:
+* product-loop
+### Optional inlcudes are:
+* breadcrumbs
+* products_filter
+* quickview_modal (make sure you don't have a quick view button on your products)
+#################################################################################
+{% endcomment %}
+
+{% paginate collection.products by 48 %}
+{% comment %}{% include 'breadcrumbs' %}{% endcomment %}
+<!-- Mobile Filter -->
+<div class="mobile-filter">
+    Filters
+</div>
+<!-- Begin no products -->
+{% if collection.products.size == 0 %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="text-center">
+            <h2>No products found</h2>
+        </div>
+    </div>
+</div>
+{% else %}
+<!-- Begin Main Products Loop -->
+<div class="container-fluid collection-container">
+    <div class="collections-grid">
+        <div class="products">
+            <div class="row">
+            
+                {% if collection.image != "" %}
+                <figure class="col-md-3 col-sm-4 col-xs-6">
+                    <img class="img-responsive" src="{{ collection.image | collection_img_url: 'original'}}">
+                </figure>
+                {% endif %}
+                 
+                {% paginate collection.products by settings.pagination_limit %}
+                {% for product in collection.products %}
+                    {% if product.handle != "embroidery"  %}
+                        {% include 'product-loop' with collection.handle %}
+                    {% endif %}
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- QUICK VIEW MODAL -->
+{% include 'quickview-modal' %}
+
+{% include 'pagination' %}
+{% endpaginate %}
+
+{% endif %}
+
+
+
+
+
+
+
+
+
+
+<script>
+    {% endpaginate %}
+</script>

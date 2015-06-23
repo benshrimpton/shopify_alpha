@@ -1,0 +1,120 @@
+{% assign embroidery_size = 0 %}
+{% assign embroidery_price = 0 %}
+
+{% for item in cart.items %}
+  {% if item.product.handle == "embroidery" %}
+    {% assign embroidery_size = item.quantity %}
+    {% assign embroidery_price = item.price %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+{% assign cart_size = cart.item_count | minus : embroidery_size %}
+
+<div id="cart" data-moneyformat='{{ shop.money_format }}' class="container">
+  <!-- Begin empty cart -->
+  {% if cart_size == 0 %}
+  <div class="text-center cart-empty-notice">
+    <div class='row'><div class='expanded-message'><h2 class='empty-cart'>Your cart is empty!</h2></div></div>
+  </div>
+  <!-- End empty cart -->
+  
+  <!-- Begin cart -->
+  {% else %}
+  <div id="cart-row">
+    <div class="row">
+      <h1 class="page-header text-center">Your cart</h1>
+      <form action="/cart" method="post" id="cartform">
+        <table class="table">
+          <thead>
+            <tr>
+            <th class="image">Product</th>
+              <th class="item">&nbsp;</th>
+              <th class="qty text-center">Quantity</th>
+              <th class="price text-center">Price</th>
+            </tr>
+          </thead>
+          <tbody id="cart-target"></tbody>
+        </table>
+
+        <div class="col-md-4 col-lg-4 col-sm-4">
+            <textarea id="note" name="note" placeholder="Write your instructions here...">{{ cart.note }}</textarea>
+        </div>
+
+        <div class="col-md-8 col-lg-8 col-sm-8">
+          <div class="buttons clearfix text-right">
+            <a href="/cart/clear" class="btn" id="cart-empty-btn">Empty Cart</a>
+            <input type="submit" id="checkout" class="btn" name="checkout" value="Check out" />
+          </div>
+
+        {% if additional_checkout_buttons %}        
+          <div class="extra-checkout-buttons span6 text-right">
+          {{ content_for_additional_checkout_buttons }}
+          </div>
+        {% endif %}
+        </div>
+      </form>
+    </div>
+  </div>
+  {% endif %}
+  <!-- End cart --> 
+</div> 
+
+<script id="template-cart" type="text/mustache">
+  <%#items%>
+    <tr data-lineitem="<% . %>" data-handle="<% handle %>" class="cart-item-row">
+      <td class="image">
+        <div class="product_image">
+          <a href="<% url %>">
+            <img src="<% image %>"  alt="<% title %>" />
+          </a>
+        </div>
+      </td>
+      <td class="remove">
+        <a class="itemBtn" href="<% url %>"><strong><% product_title %></strong></a>      
+        <div class="cart-variant-options">
+          <ul>
+            <%#variant_options%>
+              <li><% . %></li>
+            <%/variant_options%>
+          </ul>
+        </div>   
+        <div class="cart-variant-properties">
+          <ul>
+            <%#properties%>
+            <li>Text : <% text %></li>
+            <li>Font : <% font %></li>
+            <Li>Color : <% color %></li>
+            <%/properties%>
+          </ul>
+        </div>    
+        <a class="cart removeBtn cart-remove" href="/cart/change?line=<% line %>&quantity=0" data-line="<% line %>" data-variantId="<% id %>" data-hasembroidery="<%#properties%>true<%/properties%><%^properties%>false<%/properties%>" data-quantity="<% quantity %>" >Remove &times;</a>
+      </td>
+      <td class="qty">
+        <select  name="updates[]" id="updates_<% id %>" class="tc item-quantity" data-variantid="<% id %>" data-producthandle="<% handle %>" data-hasembroidery="<%#properties%>true<%/properties%><%^properties%>false<%/properties%>" data-itemid="<% id %>" data-originalquantity='<% quantity %>' data-line="<%line%>">
+          <option value="<% quantity %>"><% quantity %></option>
+        </select>
+      </td>
+      <td class="price">
+        <% line_price %>
+        <%#embroidery_price%>
+          <span class="embroidery_price"> + <% embroidery_price %></span>
+        <%/embroidery_price%>
+      </td> 
+    </tr>
+  <%/items%>
+  <tr class="summary cart-total">
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td><strong>TOTAL</strong></td>
+    <td class="price"><strong class='total'><% total_price %></strong></td>
+  </tr>
+</script>
+
+<!--  -->
+<script id="template-cart-empty-message" type="text/mustache">
+  <div class="text-center cart-empty-notice">
+    <div class='row'><div class='expanded-message'><h2 class='empty-cart'>Your cart is empty!</h2></div></div>
+  </div>
+</script>
+

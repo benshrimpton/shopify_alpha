@@ -1,0 +1,119 @@
+{% for item in cart.items %}
+  {% if item.product.handle == "embroidery" %}
+    {% assign embroidery_size = item.quantity %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+{% assign cart_size = cart.item_count | minus : embroidery_size %}
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="{{ shop.url }}">{{ shop.name }}</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+<!--         <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li> -->
+        {% for link in linklists.main-menu.links %}
+        	<li><a href="{{link.url}}">{{ link.title }}</a></li>
+        {% endfor %}
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+            <li class="divider"></li>
+            <li><a href="#">One more separated link</a></li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+        	<a href="#" id="cart-count" class="toggle-mini-cart">Cart (<span id="cart-item-count">{{ cart_size }}</span>)</a>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+  <div id="mini-cart-target"></div>
+</nav>
+
+<script id="template-mini-cart" type="text/mustache">
+<menu id="mini-cart">
+	<header class="mini-cart-header">
+		<h4>Your Bag</h4>
+		<a href="#" id="mini-cart-close" class="toggle-mini-cart">Close</a>
+	</header>
+	<div class="mini-cart-body">
+		<%#items%>
+		<div class="mini-cart-item-wrapper" >
+			<div class="mini-cart-item-thumbnail">
+				<a href="<% url %>">
+					<img src="<% image %>" alt="<% title %>" class="img-thumbnail">
+				</a>
+			</div>
+			<div class="mini-cart-item">
+				<a href="<%url%>">
+					<%product_title%>
+				</a>
+			</div>
+			<div class="mini-cart-item-variant-options">
+				<ul>
+					<%#variant_options%>
+					<li><% . %></li>
+					<%/variant_options%>
+				</ul>
+			</div>
+			<div class="mini-cart-item-properties">
+				<ul>
+					<%#properties%>
+					<li>Text : <% text %></li>
+					<li>Font : <% font %></li>
+					<Li>Color : <% color %></li>
+					<%/properties%>
+				</ul>
+			</div>
+			<div class="mini-cart-item-quantity">
+				<label>Qty :</label>
+				<select data-producthandle="<% handle %>" data-target="line-item-quantity" class="item-quantity" data-variantid="<% id %>" data-hasembroidery="<%#properties%>true<%/properties%><%^properties%>false<%/properties%>" data-itemid="<%id%>" data-line="<%line%>" data-originalquantity='<% quantity %>'>
+					<option select="select"><% quantity %></option>
+				</select>
+			</div>
+			<div class="mini-cart-line-price">
+				<div class="line-price">
+					<span class="price"><%line_price%></span>
+					<%#embroidery_price%>
+					<span class="embroidery_price"> + <% embroidery_price %></span>
+					<%/embroidery_price%>
+				</div>
+			</div>
+			<div class="mini-cart-item-remove">
+				<button class="btn btn-default btn-sm mini-cart-remove" data-line="<%line%>" data-variantid = "<%variant_id%>" data-hasembroidery="<%#properties%>true<%/properties%><%^properties%>false<%/properties%>" data-quantity="<% quantity %>">Remove</button>
+			</div>
+		</div>
+		<%/items%>
+		<%^items%>
+			<div class="mini-cart-empty">
+				<span class="mini-cart-empty-message">You Cart Is Empty !!!! </span>
+			</div>
+		<%/items%>
+	</div>
+	<footer>
+		<div class="mini-cart-total">
+			Total Price : <span class="total-price"><%total_price%></span>
+		</div>
+		<a href="/cart" id="mini-cart-checkout" class="btn btn-primary" title="Cart Checkout">CHECKOUT</a>
+	</footer>
+</menu>
+</script>

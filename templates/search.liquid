@@ -1,0 +1,122 @@
+<div id="search" class="container body-container">
+  {% if search.performed %}
+  {% paginate search.results by settings.pagination_limit %}
+
+  {% if search.terms == "" %}
+
+        <form class="search" action="/search">
+          <input type="image" src="{{ 'icon-search.png' | asset_url }}" alt="Go" id="go">
+          <input type="text" name="q" class="search_box" placeholder="Search" value=""  />
+          <input type="hidden" name="type" value="product" />
+        </form>
+
+  {% else %}
+
+  {% if search.results == empty %}
+
+      <h2 class="page-header text-center">No search results</h2>
+<!--       <p class="text-center">Your search for <strong>"{{ search.terms }}"</strong> did not yield any results. Try searching for something else.</p>
+
+    <form class="search" action="/search"><div class="text-center row">
+      <div class="col-sm-6 col-md-6 col-md-offset-2 col-sm-offset-2">
+        <input type="text" name="q" class="search_box form-control" placeholder="Search" value="{{ search.terms | escape }}" />
+      </div>
+      <div class="col-sm-2 col-md-2">
+        <input type="submit" value="submit" id="go" class="btn btn-primary btn-100">
+      </div>
+    </div> 
+    </form> -->
+  {% else %}
+
+
+      <h2 class="page-header text-center">Search Results</h2>
+
+
+<!-- ######### Begin results ######### -->
+
+  <div class="row products">
+  {% for item in search.results %}
+
+      <div class="product col-xs-6 col-sm-4 col-md-3 ">
+  
+  {% if product.price_min < product.compare_at_price_min %}
+    <span class="sale">Sale</span>
+  {% endif %}
+  
+  <div class="image">
+    <div class="table">
+      <div class="table-cell">
+        <a href="{{ item.url }}">
+          <img
+          src="{{ item.featured_image | product_img_url: 'large' }}"
+          alt="{{ item.title | escape  }}"
+          class="img-responsive"
+          data-swap-one="{{ item.images[2] | product_img_url: 'large' }}"
+          data-swap-two="{{ item.images[3] | product_img_url: 'large' }}"
+          />
+        </a>
+      </div>
+    </div>
+  </div>
+  
+  <div class="details">
+      <div class="table">
+         <div class="table-cell">
+           <div>
+              <a href="{{ url }}">
+                <h4 class="title">{{ item.title }}</h4>
+                
+                <span class="price">
+                {% if item.available %}
+                  {% if item.compare_at_price_max > item.price %}
+                    <del>{{ item.compare_at_price | money }}</del>
+                  {% endif %}
+                  {% if item.price_varies %}
+                  <small><em>from</em></small>
+                  {% endif %}
+                  {{ item.price | money }} 
+                {% else %}
+                  {{ item.price | money }} Sold Out
+                {% endif %}
+                </span>
+              </a>
+          {% if template contains 'collection' %}
+          <!--
+          #################
+          {% comment %}
+          BB REQUIRED to handle the quick-view, you can modify this to another element
+          but must have the class "quick-shop" and data-handle="{{ product.handle  }}"
+          {% endcomment %}
+          #################
+          -->
+          <a href ="#quick-view-container" data-handle="{{ product.handle }}" class="quick-shop">Quick Shop</a>
+          {% endif %}
+         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    {% endfor %}
+  </div>
+
+<!-- ######### End results ######### -->
+
+  {% include 'pagination' %}
+
+  {% endif %}
+  {% endif %}
+
+  {% endpaginate %}
+
+  {% else %}
+
+        <form class="search" action="/search">
+          <input type="text" name="q" class="search_box" placeholder="Search" value="" />
+          <input type="submit" value="submit" id="go">
+          <input type="hidden" name="type" value="product" />
+        </form>
+
+
+  {% endif %}
+</div> <!-- /#search -->

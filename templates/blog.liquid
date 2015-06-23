@@ -1,0 +1,78 @@
+<div id="blog" class="container-fluid">
+    <div class="row">
+        <div class="col-sm-7 col-sm-offset-1 col blog-section">
+            <!-- Begin content -->
+            <div class="tag">
+                <div class="btn-toolbar text-center" role="toolbar">
+                    {% for tag in blog.all_tags %}
+                    {% if current_tags contains tag %}
+                    <button type="button" class="btn btn-default btn-sm btn-primary">{{ tag | link_to_remove_tag: tag }}</button>
+                    {% else %}
+                    <button type="button" class="btn btn-default btn-sm">{{ tag | link_to_tag: tag }}</button>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+           
+
+                {% paginate blog.articles by 10 %}
+
+                <div class="articles">
+                    {% for article in blog.articles %}
+                    <div class="article">
+                        <div class="byline time">
+                            <span>          {% for tag in article.tags offset:1 %}
+                            {{tag}}
+                            {% endfor %}</span>
+                        </div>
+                        <h1><a href="{{ article.url }}">{{ article.title }}</a></h1>
+                        {% if article.comments_enabled? %}<span>{{ article.comments_count }} {{ article.comments_count | pluralize: "Comment", "Comments" }}</span>{% endif %}
+                        <div class="time">
+                            <time datetime="{{ article.published_at | date: "%B:%d:%Y" }}">{{ article.published_at | date: "%B %d %Y" }}</time>
+                        </div>
+                        <div class="byline time">
+                            <span>Solid and Striped</span>
+                        </div>
+                        <div class="excerpt">
+                            {{ article.excerpt }}
+                        </div>
+
+                        <div>
+                            <ul class="social-share">
+                                <li><a target="_blank" href="mailto:?subject={{ article.title }} by SOLID & STRIPED&amp;body=http://solidandstriped.com{{ article.url }}" class="email">&#xe024;</a></li>
+                                <li><a target="_blank" href="http://www.facebook.com/sharer.php?u=http://solidandstriped.com{{ article.url }}" class="facebook" >&#xe027;</a></li>
+                                <li><a target="_blank" href="https://twitter.com/intent/tweet?url=http://solidandstriped.com{{ article.url }}&amp;text={{ article.title }}&amp;via=solidandstriped&amp;source=twitter"  class="twitter">&#xe086;</a></li>
+                                <li><a target="_blank" href="https://plus.google.com/share?url=http://solidandstriped.com{{ article.url }}" class="google-plus" >&#xe039;</a></li>
+                            </ul>
+                        </div>
+                        <a class="readmore" href="{{ article.url }}">read more</a>
+                    </div>
+                    {% unless forloop.last %}
+                    <hr class="divider" />
+                    {% endunless %}
+                    {% endfor %}
+                    {% include 'pagination' %}
+                </div>
+
+                {% endpaginate %}
+
+
+      
+            <!-- End content -->
+        </div>
+        <div class="col-sm-2 col-sm-offset-1 col press-section">
+            <div class="title">Follow Us</div>
+            <div class="subtitle"><a href="http://instagram.com/solidandstriped" target="_blank">&#64;solidandstriped</a></div>
+
+            <div class="row">
+
+                <div id="instafeed"></div>
+
+
+            </div>
+        </div>
+
+
+
+    </div>
+</div>

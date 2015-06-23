@@ -1,0 +1,49 @@
+/*
+Basic styles for color picker boxes
+*/
+.color-picker-inner {
+	max-width: 50px; 
+	max-height: 50px;
+	min-width: 50px; 
+	min-height: 50px;
+}
+.color-selected {
+    border-style: solid;
+    border-width: 5px;
+    border-color: black;
+}
+
+
+.product-option a {
+	border: blue;
+	border-style: dashed;
+	border-width: thin;
+	margin-right: 10px;
+}
+
+.product-option a:not(.product-option-out):hover {
+	background-color: pink; 
+}
+
+.product-option a.product-option-selected {
+	background-color: black;
+}
+
+.product-option a.product-option-out {
+/*	display: block;
+	position: absolute;
+	top: 24px;
+	right: -10px;
+	width: 88px;
+	height: 2px;
+	background-color: #fff;
+	-moz-transform: rotate(-35deg);
+	-ms-transform: rotate(-35deg);
+	-webkit-transform: rotate(-35deg);
+	transform: rotate(-35deg);
+	content: ""*/
+	background-color: red;
+	cursor: default;
+}
+
+

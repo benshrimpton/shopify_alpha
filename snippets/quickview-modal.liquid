@@ -1,0 +1,55 @@
+<!-- Modal -->
+<div class="modal" id="quickview-target" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+</div>
+<!-- quick-view-container:end -->
+
+<script id="template-quickview" type="text/mustache">
+    <%#available%>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="quickview-add-item-form" action="/cart/add" method="post" class="variants clearfix">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title text-center"><a href=""><% title %></a></h4>
+                </div>
+                <div class="modal-body">
+                    <!-- quick-view-container:start -->
+                    <div id="quick-view-container">
+                        <div class="image">
+                            <a href="<% url %>">
+                                <img src="<% featured_image %>" class="img-maxwidth img-responsive"/>
+                            </a>
+                        </div>
+                        <div class="product-variant-price-wrapper"></div>
+                        
+                        <div id="product-variant">
+                            <select id="product-variant-select" name="id" data-listener="variants" data-producthandle="<% handle %>">
+                                <%#variants%>
+                                    <option value="<% id %>"><% title %> - <% price %></option>
+                                <%/variants%>
+                            </select>
+                        </div>
+                        <div class="selector-wrapper quantity-wrapper">
+                            <label>Quantity</label>
+                            <select id="product-variant-quantity" name="quantity" class="tc" data-target="quantity" data-itemid="<% id%>" >
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="quickview-purchase-section">
+                        <div class="quickview-purchase">
+                            <p style="display:none">Sold Out</p>
+                            <input type="submit" id="product-add-to-cart" class="btn" name="add" value="Add to cart" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <%/available%>
+    <%^available%>
+        <h4>Nothing to show</h4>
+    <%/available%>
+</script>

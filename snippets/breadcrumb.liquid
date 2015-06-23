@@ -1,0 +1,28 @@
+<div class="breadcrumb">
+  <span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+    <a href="{{ shop.url }}" title="{{ shop.name | escape }}" itemprop="url">
+      <span itemprop="title">Home</span>
+    </a>
+  </span>
+  <span class="arrow-space">&nbsp;&#124;&nbsp;</span>
+  <span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+    <a href="{{ collection.url }}" title="{{ collection.title | escape }}" itemprop="url">
+      <span itemprop="title">{{ collection.title }}</span>
+    </a>
+  </span>
+
+  {% if current_tags %}
+    {% for tag in current_tags %}
+      <span class="arrow-space">&nbsp;&#124;&nbsp;</span>
+      <span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+        <a href="/collections/{% if collection.handle != blank %}{{ collection.handle }}{% else %}all{% endif %}/{{ tag | handleize }}" title="{{ tag | escape }}" itemprop="url">
+          <span itemprop="title">{{ tag }}</span>
+        </a>
+      </span>
+    {% endfor %}
+  {% endif %}
+
+  {% if paginate.pages != 0 %}
+    <span class="arrow-space">&nbsp;&#124;&nbsp;</span> <strong>Page {{ paginate.current_page }} of {{ paginate.pages }}</strong>
+  {% endif %}
+</div>

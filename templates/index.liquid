@@ -1,0 +1,27 @@
+<div class="row">
+	<h3>This is home page </h3>
+	{% if collections.products.size == 0 %}
+		There is no featured products
+	{% endif %}
+    {% for product in collections.featured.products | limit: 3 %}
+    <div class="col-sm-4 col-md-4 col-lg-4">
+	        <div class="inner product-block">
+		        <a href="{{product.url}}">
+		            {% for image in product.images limit:1 %}
+		            <img class="img-responsive" src="{{ image | product_img_url: 'large'}}"/>
+		            {% endfor %}
+		        </a>
+	            <div class="meta">
+	                <div class="table">
+	                    <div class="table-cell">
+	                        <div>
+	                            <h2>{{ product.title }}</h2>
+	                            <a href="/" class="btn btn-primary">BUY NOW</a>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+    </div>
+    {% endfor %}
+</div><!-- ./row -->

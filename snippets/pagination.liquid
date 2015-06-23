@@ -1,0 +1,33 @@
+{% if paginate.pages > 1 %}
+
+
+<!--     <ul class="pagination clearfix">
+    {% if paginate.previous %}
+    	<li><a href="{{ paginate.previous.url }}" class="prev">Previous</a></li>
+    {% else %}
+    	<li><span>{{ back_word }}</span></li>
+    {% endif %}
+    	<li>Page {{ paginate.current_page }} of {{ paginate.pages }}</li>
+    {% if paginate.next %}
+    	<li><a href="{{ paginate.next.url }}" class="next">Next</a></li>
+    {% else %}
+    	<li><span>{{ next_word }}</span></li>
+    {% endif %}
+    </ul> -->
+    <ul class="pagination">
+        <li>
+            <a href="{{ paginate.previous.url }}">&lt;</a>
+        </li>
+ {% for part in paginate.parts %}
+       
+        <li  {% if part.title == paginate.current_page %}class="active" {%endif%}>
+        {{ part.title | link_to: part.url}}
+        </li>  
+{% endfor %}
+        <li>
+            <a href="{{ paginate.next.url }}">&gt;</a>
+        </li>
+    </ul>
+
+
+{% endif %}

@@ -1,0 +1,78 @@
+{% layout settings.customer_layout %}
+
+<div id="customer-register" class="container">
+  <div class="row">
+    <div id="register" class="col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-4">
+
+	    {% form 'create_customer' %}
+
+	      {{ form.errors | default_errors }}
+			 <div class="form-group">
+			    <label for="first-name" class="control-label text-center">First Name</label>
+			    <div class="">
+			      <input type="text" value="" name="customer[first_name]" class="form-control" id="first-name" placeholder="First Name">
+			    </div>
+			  </div>
+			 <div class="form-group">
+			    <label for="last-name" class="control-label text-center">Last Name</label>
+			    <div class="">
+			      <input type="text" value="" name="customer[last_name]" class="form-control" id="last-name" placeholder="Last Name">
+			    </div>
+			  </div>			
+			 <div class="form-group">
+			    <label for="email" class="control-label text-center">Email</label>
+			    <div class="">
+			      <input type="email" value="" name="customer[email]" class="form-control" id="email" placeholder="Email">
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="password" class="control-label text-center">Password</label>
+			    <div class="">
+			      <input type="password" value="" name="customer[password]" class="form-control" id="password" placeholder="Password">
+			    </div>
+			  </div>
+<!-- 			  <div class="form-group">
+			    <div class="col-sm-offset-6 col-sm-10">
+			      <div class="checkbox">
+			        <label>
+			          <input type="checkbox"> Remember me
+			        </label>
+			      </div>
+			    </div>
+			  </div> -->
+			  <div class="form-group">
+			    <div class="">
+			      <button type="submit" class="btn btn-default">Sign in</button>
+			    </div>
+			  </div>
+
+<!-- 	      <div id="first_name" class="clearfix large_form">
+	        <label for="first_name" class="label">First Name</label>
+	        <input type="text" value="" name="customer[first_name]" id="first_name" class="text" size="30" />
+	      </div>
+
+	      <div id="last_name" class="clearfix large_form">
+	        <label for="last_name" class="label">Last Name</label>
+	        <input type="text" value="" name="customer[last_name]" id="last_name" class="text" size="30" />
+	      </div>
+
+	      <div id="email" class="clearfix large_form">
+	        <label for="email" class="label">Email Address</label>
+	        <input type="email" value="" name="customer[email]" id="email" class="text" size="30" />
+	      </div>
+
+	      <div id="password" class="clearfix large_form">
+	        <label for="password" class="label">Password</label>
+	        <input type="password" value="" name="customer[password]" id="password" class="password text" size="30" />
+	      </div>
+
+	      <div class="action_bottom">
+	        <input class="btn" type="submit" value="Create" />
+	        <span class="note">or <a href="{{ shop.url }}">Return to Store</a></span>
+	      </div> -->
+
+	    {% endform %}
+
+    </div><!-- #register -->
+  </div><!-- .row -->
+</div><!-- #customer-register -->

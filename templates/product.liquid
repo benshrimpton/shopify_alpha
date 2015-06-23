@@ -1,0 +1,197 @@
+<div id="product" data-productHandle="{{product.handle}}" data-containembroidery="{% if product.tags contains 'emb' %}true{% else %}false{% endif %}" >
+    <meta itemprop="url" content="{{ shop.url }}{{ product.url }}" />
+    <meta itemprop="image" content="{{ product.featured_image.src | product_img_url: 'grande' }}" />
+    <div class="row">
+        <div class="col-md-4">
+            <div id="product-gallery" class="royalSlider rsDefault visibleNearby">                
+                <div class="featured-image-div">
+                    {% assign featured_image = product.selected_or_first_available_variant.featured_image | default: product.featured_image %}
+                    <a href="{{ featured_image | img_url: 'grande' }}" >
+                      <img src="{{ featured_image | img_url: 'grande' }}" alt="{{ featured_image.alt | escape }}" />
+                    </a>
+                </div>
+
+                {% comment %}
+                ################
+                Check whether the product has image associated with its variants
+                if there's variable thumbExisted is not null, otherwise, it is null.
+                ################
+                {% endcomment %}
+
+                {% assign thumbExisted = null %}
+                {% assign thumbExisted = product.images | last %}
+                {% assign thumbExisted = thumbExisted.variants | first %}
+
+
+                {% if product.images %}
+                    <div class="product-images">
+                        {% for image in product.images %}
+
+                            {% assign variant = null %}
+                            {% assign variant = image.variants | first %}
+
+                            {% comment %}
+                            Print out images which aren't variant images from the non-variant product
+                            {% endcomment %}
+                            {% if thumbExisted == null && variant == null %}
+                            <a class="rsImg" href="{{ image | product_img_url: '1024x1024' }}">
+                                <img src="{{ image | product_img_url: 'compact' }}" class="rsTmb" />
+                            </a>
+                            {% endif %}
+
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+            </div>
+        </div><!-- ./col-md-4 -->
+        <div class="col-md-6">
+            <div class="product-wrapper">
+                <div class="product-header">
+                    <h2>
+                        <a href="{{product.url}}">{{product.title}}</a>
+                    </h2>
+                </div>
+                <div class="product-content">
+                    <div class="product-desc">
+                        <h3>Product Information</h3>
+                        {{product.description}}
+                    </div>
+                    <form id="product-add-item-form" action="/cart/add" method="post" class="clearfix">
+                        <div class="product-variants">
+                            <div class="product-variant-price-wrapper">
+                                <span class="product-variant-price" data-target="price">
+                                    {{ product.selected_or_first_available_variant.price | money }}
+                                    {% if product.selected_or_first_available_variant.price < product.selected_or_first_available_variant.compare_at_price %} 
+                                        <del>{{ product.selected_or_first_available_variant.compare_at_price | money }}</del>
+                                    {% endif %}
+                                </span>
+                            </div>
+
+                            <div id="product-variants-target"></div>
+
+                            <div class="product-variant-quantity">
+                                Quantity : 
+                                <select id="product-variant-quantity" data-target="quantity" name="quantity" data-producthandle="{{product.handle}}"></select>
+                            </div>
+
+                            <div id="product-variant">
+                                <select id="product-variant-select" name="id"  data-listener='variants' data-producthandle="{{product.handle}}">
+                                    {% for variant in product.variants %}
+                                        <option {% if variant == product.selected_or_first_available_variant %} selected="selected" {% endif %} value="{{ variant.id }}" data-options="{{product.options}}" >
+                                            {{ variant.title }} - {{ variant.price | money }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>  
+
+                            {% if product.tags contains 'emb' %}
+                                {% include 'embroidery' %}
+                            {% endif %}
+
+                        </div><!-- ./product-variants -->
+                        <div class="product-add-item">
+                           {% unless product.available %}
+                                <div class="product-sold-out">Sold Out</div>
+                            {% else %}
+                                <input type="submit" id="product-add-to-cart" class="btn btn-md" name="add" value="Add to Cart" />
+                            {% endunless %}
+                        </div><!-- ./product-variants -->
+                    </form>  
+                </div>
+                <div class="product-footer">
+                    <div class="product-return-policy">
+                        <h2>Return Policy</h2>
+                        <!--Text should be a div for proper styling-->
+                        <div>
+                            <p>If for any reason you are not happy with your purchase, you may return the items within 15 days of the original purchase date for a refund less the original shipping charges.</p>
+                            <a href="/pages/shipping-returns-policy-1">see all return policy details</a>
+                        </div>
+                    </div><!-- ./product-return-policy-->
+                    <div class="product-shipping-info">
+                        <h2>Shipping Information</h2>
+                        <div>
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td>FedEx Ground</td>
+                                        <td>1-5 Business Days</td>
+                                        <td>Free</td>
+                                    </tr>
+                                    <tr>
+                                        <td>FedEx Overnight</td>
+                                        <td>1 Business Day</td>
+                                        <td>$20.00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <a href="/pages/shipping-returns-policy-1">see all shipping details</a>
+                        </div>
+                    </div>
+                    <div class="product-size-guide">
+                        <!-- SIZE GUIDE -->
+                        {% comment %}
+                        {% include 'size_guide' %}
+                        {% endcomment %}
+                    </div>
+                </div><!-- ./product-footer -->
+            </div><!--  ./product-wrapper-->
+        </div><!-- ./col-md-6 -->
+    </div><!-- ./row -->
+</div><!-- ./#product -->
+
+<script id="product-data" type="application/json">
+    {{product | json}}
+</script>
+
+<script id="template-product-variants" type="text/mustache">
+    <%# optionName1 %>
+        <div data-option="1" class="product-option" data-option-position="0">
+            <label><% optionName1 %></label>
+            <%# option1 %>
+            <a href="javascript:void(0);"  data-option-value="<%option%>" data-variant-image="<%#image%>true<%/image%><%^image%>false<%/image%>"  data-variant-id="<%id%>" >
+                <%#image%> 
+                    <img src="<%image%>" alt="<%option%>" width="50" height="50" />
+                <%/image%>
+                <%^image%>
+                    <%option%>
+                <%/image%>
+            </a>
+            <%/ option1 %>
+        </div>
+    <%/ optionName1 %>
+    <%# optionName2 %>
+        <div data-option="2" class="product-option" data-option-position="1">
+            <label><% optionName2 %></label>
+            <%# option2 %>
+            <a href="javascript:void(0);"  data-option-value="<%.%>"  >
+                <%.%>
+            </a>
+            <%/ option2 %>
+        </div>
+    <%/ optionName2 %>
+    <%# optionName3 %>
+        <div data-option="3" class="product-option" data-option-position="2">
+            <label><% optionName3 %></label>
+            <%# option3 %>
+            <a href="javascript:void(0);"  data-option-value="<%.%>"  >
+                <%.%>
+            </a>
+            <%/ option3 %>
+        </div>
+    <%/ optionName3 %>
+</script>
+
+
+
+<!-- Begin related product -->
+{% if settings.show_related_products %}
+<section class="related-wrapper">
+{% include 'related-products' %}
+</section>
+{% endif %}
+
+{% if settings.isRecentlyViewed %}
+{% include 'recently-viewed' %}
+{% endif %}
+

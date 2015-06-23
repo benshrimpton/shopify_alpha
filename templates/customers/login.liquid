@@ -1,0 +1,102 @@
+{% layout settings.customer_layout %}
+<div class="login_form container">
+	<div class="row">
+		<div class="col-sm-offset-3 col-sm-6">
+		
+			<section id="customer">
+			
+			
+				<h2 class="page-header">Customer Login</h2>
+			
+		
+				{% form 'customer_login' %}
+					{{ form.errors | default_errors }}
+		
+					<div class="form-group">
+						<label for="customer_email" class="login">Email Address</label>
+						<input type="email" name="customer[email]" id="customer_email" class="form-control" placeholder="Email" />
+					</div>
+		
+					{% if form.password_needed %}
+		
+					{% comment %}
+						Customer Account Login
+					{% endcomment %}
+		
+					<div class="form-group">
+						<label for="customer_password" class="login">Password</label>
+						<input type="password" name="customer[password]" id="customer_password" class="form-control" placeholder="Password" />
+						<a href="#" onclick="showRecoverPasswordForm()" class="forgot_password_link">Forgot your password?</a>
+					</div>
+		
+					{% endif %}
+		
+					<div class="form-group">
+						<input type="submit" value="Sign In" class="btn"/>
+						<span class="note">or <a href="{{ shop.url }}">Return to Store</a></span>
+					</div>
+					
+				{% endform %}
+			</section><!-- END #customer -->
+
+			{% comment %}
+				Recover Password Form
+			{% endcomment %}
+		
+			<section id="recover-password" style="display: none">
+				
+				<h2>Reset Password</h2>
+				
+				<p>We will send you an email to reset your password.</p>
+				
+				{% form 'recover_customer_password' %}
+				{{ form.errors | default_errors }}
+				
+				<div class="form-group" id="recover_email">
+					<label for="email" class="large">Email Address</label><br />
+					<input type="email" name="email" id="recover-email" class="form-control" placeholder="Email" />
+				</div>
+					
+				<div class="form-group">
+					<input class="btn" type="submit" value="Submit" />
+					<span class="note">or <a href="#" onclick="hideRecoverPasswordForm()">Cancel</a></span>
+				</div>
+				{% endform %}
+					
+			</section><!-- END #recover-password -->
+		</div><!-- END COL -->
+	</div><!-- END ROW -->
+	
+
+		{% comment %}
+		 Guest Login form for shops with optional customer accounts. This form is displayed only when users click on the checkout link
+		 on the cart page.
+		{% endcomment %}
+	
+		{% if shop.checkout.guest_login %}
+	 		<div id="guest">
+				<div class="hgroup">
+					<h3>Guest Login</h3>
+				</div>
+				{% form 'guest_login' %}
+				<input class="btn" type="submit" value="Continue as Guest" />
+				{% endform %}
+			</div>
+		{% endif %}
+
+	<script type="text/javascript">
+	  function showRecoverPasswordForm() {
+	    document.getElementById('recover-password').style.display = 'block';
+	    document.getElementById('customer').style.display='none';
+	    return false;
+	  }
+
+	  function hideRecoverPasswordForm() {
+	    document.getElementById('recover-password').style.display = 'none';
+	    document.getElementById('customer').style.display = 'block';
+	    return false;
+	  }
+
+	  if (window.location.hash == '#recover') { showRecoverPasswordForm() }
+	</script>
+</div>

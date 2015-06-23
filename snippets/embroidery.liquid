@@ -1,0 +1,146 @@
+{% comment %}
+Example : 
+Let's say 
+You have a "frame" field for the product. 
+You must include name=properties[frame] into your input/select/checkbox . 
+{% endcomment %}
+
+<div id="embroidery-target">
+	<div class="embroidery">
+		<div class="embroidery-header">
+			<h4>This is embroidery section</h4>
+		</div><!-- ./.embroidery-header -->	
+		<div class="embroidery-body" id="embroidery-body-target">
+			<input type="hidden" value="false" name="properties[hasEmbroidery]">
+			<select name="properties[font]">
+				<option value="italic">Italic</div>
+				<option value="bold">Bold</div>
+				<option value="heavy">Heavy</div>
+			</select>
+			<input name="properties[text]" placeholder="Enter Here">
+			<select name="properties[color]" id="colorPicker">
+				<option data-hex="#FF0000" value="red">Red</option>
+				<option data-hex="#0000FF" value="blue">Blue</option>
+				<option data-hex="#00FF00" value="green">Green</option>
+				<option data-hex="#00FFFF" value="yellow">Yellow</option>
+			</select>
+		</div><!-- ./.embroidery-body -->
+		<div class="embroidery-footer">
+          <label>
+          	<input type="checkbox" id="embroideryNeeded" checked> Check for Embroidery
+          </label>	
+		</div>	
+	</div>
+</div>
+
+{% comment %}
+DOM in the following script needs to be same as the DOM within (id="embroidery-body")
+{% endcomment %}
+<script id="template-embroidery-body" type="text/mustache">
+  <input type="hidden" value="true" name="properties[hasEmbroidery]">
+  <select name="properties[font]">
+    <option value="italic">Italic</div>
+    <option value="bold">Bold</div>
+    <option value="heavy">Heavy</div>
+  </select>
+  <input name="properties[text]" placeholder="Enter Here">
+  <select name="properties[color]" id="colorPicker">
+    <option data-hex="#FF0000" value="red">Red</option>
+    <option data-hex="#0000FF" value="blue">Blue</option>
+    <option data-hex="#00FF00" value="green">Green</option>
+    <option data-hex="#00FFFF" value="yellow">Yellow</option>
+    <option data-hex="#EEEEEE" value="grey">Grey </option>
+  </select>
+</script>
+
+
+
+<script>
+
+	/**
+	 * How to use the EmbColorPicker 
+	 *
+	 * new EmbColorPicker({
+	 * 	selector : The Color Select DOm
+	 * 	target : The DOm to be appended to, 
+	 * 	innerClass : The Class name for color grid 
+	 * 	outerClass : The class name for the DIV element
+	 * }).init();
+	 */
+	EmbColorPicker = function(params){
+		this.selecterDOMId = params.selector;
+		this.selector = document.querySelector(params.selector);
+		this.target = document.querySelector(params.target || this.selector.parentNode);
+		this.colors = [];
+		this.innerClass =  params.innerClass ||'color-picker-inner';
+		this.outerClass = params.outerClass || 'color-picker-outer';
+		this.selectedClass = "color-selected";
+		this.displayDropDown = params.displayDropDown || true;
+	};
+
+	EmbColorPicker.prototype.processOptions = function(){
+		var e = this.selector.options;
+		var i; 				
+		for(i = 0; i < e.length; i++){
+			this.colors.push({
+				hex : e[i].dataset.hex, 
+				val : e[i].value
+			});
+		}
+	};
+
+	EmbColorPicker.prototype.generate = function(){
+		this.processOptions();
+		var outerDiv = document.createElement('div');
+		outerDiv.dataset.target = this.selecterDOMId;
+		var i; 
+		outerDiv.setAttribute('class', this.outerClass);
+		for(i = 0; i < this.colors.length; i++){
+			var colorDiv = document.createElement('div');
+			colorDiv.style.backgroundColor = this.colors[i].hex;
+			colorDiv.dataset.color = this.colors[i].val;  
+			colorDiv.setAttribute('class', this.innerClass);
+			colorDiv.onclick = this.onClick;
+			outerDiv.appendChild(colorDiv);
+		}
+		return outerDiv;
+	};
+
+	EmbColorPicker.prototype.removeClass= function(ele, cls){
+		if (hasClass(ele,cls)) {
+		    var reg = new RegExp('(\\s|^)'+cls+'(\\s|$)');
+		    ele.className=ele.className.replace(reg,' ');
+	  	}	
+	};
+
+	EmbColorPicker.prototype.onClick = function(event){
+		var cls = "color-selected"
+		var selectedColorDIV = document.querySelectorAll('.'+cls);
+		if (selectedColorDIV){
+			for(var i = 0; i < selectedColorDIV.length; i++){
+				var reg = new RegExp('(\\s|^)'+cls+'(\\s|$)');
+				selectedColorDIV[i].className = selectedColorDIV[i].className.replace(reg, '');
+			}
+		}
+		var colorDivs =  document.querySelector(this.dataset.target);
+		document.querySelector(this.parentNode.dataset.target).value = this.dataset.color;
+        document.querySelector(this.parentNode.dataset.target).dispatchEvent(new Event('change', { 'bubbles': true })); 
+		this.className += " " + cls;
+	};
+
+	EmbColorPicker.prototype.init = function(){
+		var colorPicker = this.generate();
+		this.target.appendChild(colorPicker);
+		if ( !this.displayDropDown )
+			this.selector.style.display = 'none';
+	};
+
+	$(document).ready(function(){
+		new EmbColorPicker({
+			selector : '#colorPicker',
+			target : '.embroidery-body', 
+			displayDropDown : true
+		}).init();
+	});
+
+</script>

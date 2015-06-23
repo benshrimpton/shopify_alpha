@@ -1,0 +1,38 @@
+<div id="blog" class="container-fluid">
+    <div class="row">
+        <div class="col-sm-7 col-sm-offset-1 col blog-section">
+            <!-- Begin content -->
+            <div class="articles">
+                <div class="article">
+                    <h1>{{ article.title }}</h1>
+                    <div class="time">
+                        <time datetime="{{ article.published_at | date: "%B:%d:%Y" }}">{{ article.published_at | date: "%B %d %Y" }}</time>
+                    </div>
+                    <div class="byline time">
+                        <span>Solid and Striped</span>
+                    </div>
+                    <div class="excerpt">
+                        {{ article.excerpt }}
+                    </div>
+                    <div class="content">
+                        {{ article.content }}
+                    </div>
+                </div>
+                <hr class="divider" />
+            </div>
+            <!-- End content -->
+        </div>
+        <div class="col-sm-2 col-sm-offset-1 col press-section">
+            <div class="title">Follow Us</div>
+            <div class="subtitle"><a href="http://instagram.com/solidandstriped" target="_blank">&#64;solidandstriped</a></div>
+
+            <div class="row">
+
+                <div id="instafeed"></div>
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
